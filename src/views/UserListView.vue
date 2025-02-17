@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import UserCard from '@/components/user-card.vue'
 import { useFetchUsers } from '@/composables/use-fetch-users'
+import PaginationControls from '@/components/paganation-controls.vue'
 
 const userStore = useUserStore()
 const router = useRouter()
@@ -97,25 +98,13 @@ watch([selectedGender, currentPage], () => {
         <UserCard :user="user" @click="viewDetails(index)" />
       </div>
 
-      <div class="pagination">
-        <button
-          @click="prevPage"
-          :disabled="currentPage === 1"
-          class="page-btn"
-        >
-          Previous
-        </button>
-        <span class="page-info"
-          >Page {{ currentPage }} of {{ totalPages }}</span
-        >
-        <button
-          @click="nextPage"
-          :disabled="currentPage >= totalPages"
-          class="page-btn"
-        >
-          Next
-        </button>
-      </div>
+      <!-- Paganation -->
+      <PaginationControls
+        :currentPage="currentPage"
+        :totalPages="totalPages"
+        @prev="prevPage"
+        @next="nextPage"
+      />
     </div>
   </div>
 </template>
@@ -156,6 +145,7 @@ watch([selectedGender, currentPage], () => {
 }
 
 .refresh-btn {
+  font-family: 'Lexend giga', serif;
   padding: 10px 16px;
   font-size: 16px;
   font-weight: bold;
@@ -181,6 +171,7 @@ watch([selectedGender, currentPage], () => {
 }
 
 .page-btn {
+  font-family: 'Lexend giga', serif;
   padding: 10px 14px;
   font-size: 14px;
   font-weight: bold;
@@ -211,6 +202,6 @@ watch([selectedGender, currentPage], () => {
 .loading {
   font-size: 18px;
   font-weight: bold;
-  color: #e74c3c;
+  color: #0d0d0d;
 }
 </style>

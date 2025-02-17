@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import type { User } from "@/types/User";
+import type { User } from '@/types/User'
 
-defineProps<{ user: User }>();
+defineProps<{ user: User }>()
 </script>
 
 <template>
   <div class="user-card">
-    <img :src="user.picture.thumbnail" :alt="`${user.name.first} ${user.name.last}`" />
+    <img
+      :src="user.picture.thumbnail"
+      :alt="`${user.name.first} ${user.name.last}`"
+    />
     <h3>{{ user.name.first }} {{ user.name.last }}</h3>
   </div>
 </template>
