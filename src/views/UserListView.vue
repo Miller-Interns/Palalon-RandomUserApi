@@ -10,9 +10,14 @@ const userStore = useUserStore()
 const router = useRouter()
 const { users, loading, fetchUsers } = useFetchUsers()
 
+//**
+// starting here
+// please move this to a composable  
+// */
 const selectedGender = ref(userStore.genderFilter)
 const currentPage = ref(userStore.currentPage)
 const usersPerPage = ref(userStore.usersPerPage)
+
 
 const paginatedUsers = computed(() => {
   const start = (currentPage.value - 1) * usersPerPage.value
@@ -65,6 +70,8 @@ watch([selectedGender, currentPage], () => {
   userStore.setCurrentPage(currentPage.value)
   userStore.setGenderFilter(selectedGender.value)
 })
+
+//up to here
 </script>
 
 <template>

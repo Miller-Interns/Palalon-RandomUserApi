@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { User } from '@/types/User'
 
+// TODO move this to its own file
 interface UserState {
   users: User[]
   genderFilter: string
@@ -11,14 +12,14 @@ interface UserState {
 export const useUserStore = defineStore('userStore', {
   state: (): UserState => ({
     users: [],
-    genderFilter: 'all',
+    genderFilter: 'all', // TODO use enums
     currentPage: 1,
     usersPerPage: 5,
   }),
 
   getters: {
     filteredUsers(state): User[] {
-      if (state.genderFilter === 'all') return state.users
+      if (state.genderFilter === 'all') return state.users // TODO use enums
       return state.users.filter((user) => user.gender === state.genderFilter)
     },
 

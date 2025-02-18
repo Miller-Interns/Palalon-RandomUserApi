@@ -11,6 +11,7 @@ export interface UserPicture {
   thumbnail: string;
 }
 
+// TODO move street to its own interface
 export interface UserLocation {
   street: {
     number: number;
@@ -22,6 +23,7 @@ export interface UserLocation {
   postcode: string | number;
 }
 
+// TODO move DOB to its own interface
 export interface User {
   gender: string;
   name: UserName;
