@@ -1,24 +1,19 @@
 import { defineStore } from 'pinia'
 import type { User } from '@/types/User'
-
-interface UserState {
-  users: User[]
-  genderFilter: string
-  currentPage: number
-  usersPerPage: number
-}
+import type { UserState } from '@/stores/user-state'
+import { Gender } from '@/enums/gender' //  Now importing only the enum
 
 export const useUserStore = defineStore('userStore', {
   state: (): UserState => ({
     users: [],
-    genderFilter: 'all',
+    genderFilter: Gender.All, // Using the import enum
     currentPage: 1,
     usersPerPage: 5,
   }),
 
   getters: {
     filteredUsers(state): User[] {
-      if (state.genderFilter === 'all') return state.users
+      if (state.genderFilter === Gender.All) return state.users
       return state.users.filter((user) => user.gender === state.genderFilter)
     },
 
@@ -36,7 +31,7 @@ export const useUserStore = defineStore('userStore', {
       this.users = users
     },
 
-    setGenderFilter(gender: string) {
+    setGenderFilter(gender: Gender) {
       this.genderFilter = gender
     },
 
