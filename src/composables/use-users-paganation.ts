@@ -2,6 +2,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
 import { useFetchUsers } from '@/composables/use-fetch-users'
+import { Gender } from '@/enums/gender'
+import { RouteNames } from '@/enums/route-names'
 
 export function useUserPagination() {
   const userStore = useUserStore()
@@ -19,7 +21,7 @@ export function useUserPagination() {
   })
 
   const totalPages = computed(() => {
-    if (selectedGender.value === 'all') return 10
+    if (selectedGender.value === Gender.All) return 10
     return 5
   })
 
@@ -37,8 +39,8 @@ export function useUserPagination() {
     userStore.setUsers(users.value)
   }
 
-  const viewDetails = (index: number) => {
-    router.push(`/user/${index}`)
+  const viewDetails = (id: number) => {
+    router.push({ name: RouteNames.UserDetails, params: { id } })
   }
 
   const prevPage = () => {
@@ -74,6 +76,6 @@ export function useUserPagination() {
     viewDetails,
     prevPage,
     nextPage,
-    loading, 
+    loading,
   }
 }
