@@ -1,69 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
+import { useUserPagination } from '@/composables/use-users-paganation'
 import UserCard from '@/components/user-card.vue'
-import { useFetchUsers } from '@/composables/use-fetch-users'
+import PaginationControls from '@/components/paganation-controls.vue'
 
-const userStore = useUserStore()
-const router = useRouter()
-const { users, loading, fetchUsers } = useFetchUsers()
-
-const selectedGender = ref(userStore.genderFilter)
-const currentPage = ref(userStore.currentPage)
-const usersPerPage = ref(userStore.usersPerPage)
-
-const paginatedUsers = computed(() => {
-  const start = (currentPage.value - 1) * usersPerPage.value
-  const end = start + usersPerPage.value
-  return userStore.filteredUsers.slice(start, end)
-})
-
-const totalPages = computed(() => {
-  if (selectedGender.value === 'all') return 10
-  return 5
-})
-
-const filterByGender = () => {
-  userStore.setGenderFilter(selectedGender.value)
-  currentPage.value = 1
-  refreshList()
-}
-
-const refreshList = async () => {
-  await fetchUsers(
-    50,
-    selectedGender.value === 'all' ? '' : selectedGender.value
-  )
-  userStore.setUsers(users.value)
-}
-
-const viewDetails = (index: number) => {
-  router.push(`/user/${index}`)
-}
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-  }
-}
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++
-  }
-}
-
-onMounted(async () => {
-  if (userStore.users.length === 0) {
-    await refreshList()
-  }
-})
-
-watch([selectedGender, currentPage], () => {
-  userStore.setCurrentPage(currentPage.value)
-  userStore.setGenderFilter(selectedGender.value)
-})
+const {
+  selectedGender,
+  currentPage,
+  paginatedUsers,
+  totalPages,
+  filterByGender,
+  refreshList,
+  viewDetails,
+  prevPage,
+  nextPage,
+  loading,
+} = useUserPagination()
 </script>
 
 <template>
@@ -97,25 +48,13 @@ watch([selectedGender, currentPage], () => {
         <UserCard :user="user" @click="viewDetails(index)" />
       </div>
 
-      <div class="pagination">
-        <button
-          @click="prevPage"
-          :disabled="currentPage === 1"
-          class="page-btn"
-        >
-          Previous
-        </button>
-        <span class="page-info"
-          >Page {{ currentPage }} of {{ totalPages }}</span
-        >
-        <button
-          @click="nextPage"
-          :disabled="currentPage >= totalPages"
-          class="page-btn"
-        >
-          Next
-        </button>
-      </div>
+      <!-- Paganation -->
+      <PaginationControls
+        :currentPage="currentPage"
+        :totalPages="totalPages"
+        @prev="prevPage"
+        @next="nextPage"
+      />
     </div>
   </div>
 </template>
@@ -156,6 +95,7 @@ watch([selectedGender, currentPage], () => {
 }
 
 .refresh-btn {
+  font-family: 'Lexend giga', serif;
   padding: 10px 16px;
   font-size: 16px;
   font-weight: bold;
@@ -181,6 +121,7 @@ watch([selectedGender, currentPage], () => {
 }
 
 .page-btn {
+  font-family: 'Lexend giga', serif;
   padding: 10px 14px;
   font-size: 14px;
   font-weight: bold;
@@ -211,6 +152,6 @@ watch([selectedGender, currentPage], () => {
 .loading {
   font-size: 18px;
   font-weight: bold;
-  color: #e74c3c;
+  color: #0d0d0d;
 }
 </style>
